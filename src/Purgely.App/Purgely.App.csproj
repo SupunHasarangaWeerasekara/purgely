@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Purgely.App</RootNamespace>
+    <AssemblyName>Purgely</AssemblyName>
+    <ApplicationIcon>..\..\assets\purgely.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Purgely.Core\Purgely.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\..\assets\purgely.ico" Link="Assets\purgely.ico" />
+    <Resource Include="..\..\assets\purgely-256.png" Link="Assets\purgely-256.png" />
+  </ItemGroup>
+
+</Project>

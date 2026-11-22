@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <!-- Windows 10 2004+ TFM: gives access to Windows.Management.Deployment (Store/MSIX apps) -->
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <Version>0.1.0</Version>
+    <Company>Purgely</Company>
+    <Product>Purgely</Product>
+    <Copyright>Copyright (c) 2026 Purgely</Copyright>
+  </PropertyGroup>
+</Project>

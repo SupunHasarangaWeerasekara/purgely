@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Purgely.App/Purgely.App.csproj" />
+    <Project Path="src/Purgely.Core/Purgely.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Purgely.Core.Tests/Purgely.Core.Tests.csproj" />
+  </Folder>
+</Solution>

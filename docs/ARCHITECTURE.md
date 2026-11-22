@@ -19,14 +19,16 @@ and framework / non-removable MSIX packages.
 ## Layers
 
 ```
-Purgely.App             WPF UI: app list, search/sort, details, progress, leftover review
-Purgely.Core            Models + services
-  Discovery/            IAppSource: RegistryAppSource, MsixAppSource
-  Uninstall/            IUninstaller: MsiUninstaller, ExeUninstaller, MsixUninstaller
-  Leftovers/            LeftoverScanner (files, registry, shortcuts, startup entries)
-  Safety/               Restore point, .reg backup, Recycle Bin delete, path blocklist
-Purgely.Infrastructure  Registry access, process + Job Objects, icon extraction, logging
-tests/Purgely.Core.Tests
+src/Purgely.App           WPF UI (MVVM): app list, search/sort, details, progress
+  ViewModels/             MainViewModel, AppItemViewModel
+  Services/               IconLoader, IDialogService
+src/Purgely.Core          Models + services (no UI)
+  Models/                 InstalledApp, AppKind, RegistryLocation
+  Discovery/              IAppSource → RegistryAppSource, MsixAppSource; AppCatalog merges them
+  Uninstall/              UninstallService, UninstallCommandBuilder, JobProcessRunner (Job Objects)
+  Leftovers/  (Phase 3)   LeftoverScanner (files, registry, shortcuts, startup entries)
+  Safety/     (Phase 3)   Restore point, .reg backup, Recycle Bin delete, path blocklist
+tests/Purgely.Core.Tests  Parser/command unit tests + discovery integration test
 ```
 
 ## Key rules
@@ -39,11 +41,12 @@ tests/Purgely.Core.Tests
   to `.reg` first.
 - **Blocklist:** never touch `C:\Windows`, `System32`, the root of `Program Files`,
   user profile roots, or shared publisher folders that still contain other installed apps.
-- **Elevation:** run `asInvoker`; request UAC only for machine-wide (HKLM) uninstalls.
+- **Elevation:** the MVP runs elevated (`requireAdministrator`). Target design: run `asInvoker`
+  and request UAC only for machine-wide (HKLM) uninstalls.
 
 ## Phases
 
-1. **MVP:** list apps (registry + MSIX), search/sort, uninstall one app.
+1. **MVP (done):** list apps (registry + MSIX), search/sort, uninstall one app.
 2. **Robust uninstall:** Job Object waiting, silent mode, batch uninstall, logging.
 3. **Leftover scanner** with backup + Recycle Bin.
 4. **Polish:** dark mode, size calculation, CSV export, optional winget integration,

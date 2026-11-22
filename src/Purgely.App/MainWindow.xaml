@@ -1,0 +1,179 @@
+﻿<Window x:Class="Purgely.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Purgely.App"
+        xmlns:vm="clr-namespace:Purgely.App.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+        Title="Purgely" Width="1080" Height="720" MinWidth="760" MinHeight="480"
+        WindowStartupLocation="CenterScreen"
+        Icon="pack://application:,,,/Assets/purgely.ico"
+        Background="{StaticResource WindowBrush}"
+        FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="13"
+        UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+
+    <Window.Resources>
+        <local:NullToVisibilityConverter x:Key="NotNullToVisibility" />
+        <local:NullToVisibilityConverter x:Key="NullToVisibility" Invert="True" />
+        <local:EmptyStringToVisibilityConverter x:Key="EmptyToVisibility" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid Margin="24,20,24,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Header: brand, search, refresh -->
+            <Grid Grid.Row="0" Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="pack://application:,,,/Assets/purgely-256.png" Width="40" Height="40"
+                           RenderOptions.BitmapScalingMode="HighQuality" />
+                    <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="Purgely" FontSize="22" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Summary}" Foreground="{StaticResource MutedTextBrush}" FontSize="12" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Search box with placeholder -->
+                <Border Grid.Column="2" Width="320" Height="38" CornerRadius="8" Margin="0,0,10,0"
+                        Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <Grid Margin="12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="&#xE721;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14"
+                                   Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="Search apps or publishers"
+                                   Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" IsHitTestVisible="False"
+                                   Visibility="{Binding Text, ElementName=SearchBox, Converter={StaticResource EmptyToVisibility}}" />
+                        <TextBox x:Name="SearchBox" Grid.Column="1" Margin="6,0,0,0" BorderThickness="0" Background="Transparent"
+                                 VerticalAlignment="Center" FontSize="13"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                </Border>
+
+                <Button Grid.Column="3" Style="{StaticResource SecondaryButton}" Command="{Binding RefreshCommand}"
+                        ToolTip="Reload the list of installed apps">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE72C;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" VerticalAlignment="Center" />
+                        <TextBlock Text="Refresh" Margin="8,0,0,0" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- App list -->
+            <Border Grid.Row="1" CornerRadius="12" Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="0,4,0,0">
+                <DataGrid x:Name="AppsGrid"
+                          ItemsSource="{Binding AppsView}" SelectedItem="{Binding SelectedApp}"
+                          AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                          HeadersVisibility="Column" GridLinesVisibility="None" BorderThickness="0"
+                          Background="Transparent" RowBackground="Transparent" CanUserResizeRows="False"
+                          CanUserReorderColumns="False" EnableRowVirtualization="True"
+                          ColumnHeaderStyle="{StaticResource GridHeader}" CellStyle="{StaticResource GridCell}"
+                          RowStyle="{StaticResource GridRow}" MouseDoubleClick="AppsGrid_MouseDoubleClick">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Name" Width="2.4*" SortMemberPath="Name" CanUserSort="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="vm:AppItemViewModel">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid Width="28" Height="28">
+                                            <!-- Fallback tile with the first letter, covered by the real icon once loaded -->
+                                            <Border CornerRadius="6" Background="{StaticResource BrandGradient}"
+                                                    Visibility="{Binding Icon, Converter={StaticResource NullToVisibility}}">
+                                                <TextBlock Text="{Binding Initial}" Foreground="White" FontWeight="Bold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                            <Image Source="{Binding Icon}" RenderOptions.BitmapScalingMode="HighQuality" />
+                                        </Grid>
+                                        <TextBlock Text="{Binding Name}" Margin="12,0,0,0" FontWeight="SemiBold"
+                                                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Publisher" Binding="{Binding Publisher}" Width="1.4*"
+                                            ElementStyle="{StaticResource MutedCellText}" />
+                        <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="*"
+                                            ElementStyle="{StaticResource MutedCellText}" />
+                        <DataGridTextColumn Header="Size" Binding="{Binding SizeText}" SortMemberPath="SizeSortKey" Width="90"
+                                            ElementStyle="{StaticResource MutedCellText}" />
+                        <DataGridTextColumn Header="Installed" Binding="{Binding InstallDateText}" SortMemberPath="DateSortKey" Width="100"
+                                            ElementStyle="{StaticResource MutedCellText}" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding KindText}" Width="130"
+                                            ElementStyle="{StaticResource MutedCellText}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!-- Footer: selected app + actions -->
+            <Border Grid.Row="2" Margin="0,16,0,0" Padding="18,14" CornerRadius="12"
+                    Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Select an app to uninstall it." Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center"
+                               Visibility="{Binding SelectedApp, Converter={StaticResource NullToVisibility}}" />
+
+                    <StackPanel VerticalAlignment="Center" Visibility="{Binding SelectedApp, Converter={StaticResource NotNullToVisibility}}">
+                        <TextBlock Text="{Binding SelectedApp.Name}" FontSize="15" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Foreground="{StaticResource MutedTextBrush}" FontSize="12" Margin="0,2,0,0" TextTrimming="CharacterEllipsis">
+                            <Run Text="{Binding SelectedApp.KindText, Mode=OneWay}" />
+                            <Run Text=" · " />
+                            <Run Text="{Binding SelectedApp.ScopeText, Mode=OneWay}" />
+                            <Run Text=" · " />
+                            <Run Text="{Binding SelectedApp.Model.InstallLocation, Mode=OneWay, TargetNullValue='Install folder unknown'}" />
+                        </TextBlock>
+                    </StackPanel>
+
+                    <CheckBox Grid.Column="1" Margin="16,0" VerticalAlignment="Center" IsChecked="{Binding PreferQuiet}"
+                              Content="Silent uninstall when available"
+                              ToolTip="Remove apps without showing their uninstaller, if the app supports it" />
+
+                    <Button Grid.Column="2" Style="{StaticResource DangerButton}" Command="{Binding UninstallCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE74D;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center" />
+                            <TextBlock Text="Uninstall" Foreground="White" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Busy overlay -->
+        <Grid Background="#B3F6F6FA" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
+            <Border Width="380" Padding="28,24" CornerRadius="14" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="30" ShadowDepth="4" Opacity="0.15" />
+                </Border.Effect>
+                <StackPanel>
+                    <ProgressBar IsIndeterminate="True" Height="4" BorderThickness="0"
+                                 Foreground="{StaticResource AccentBrush}" Background="{StaticResource AccentSoftBrush}" />
+                    <TextBlock Text="{Binding BusyText}" Margin="0,16,0,0" TextWrapping="Wrap" TextAlignment="Center" />
+                    <Button Style="{StaticResource SecondaryButton}" Content="Stop waiting" Margin="0,16,0,0" HorizontalAlignment="Center"
+                            Command="{Binding StopWaitingCommand}"
+                            Visibility="{Binding CanStopWaiting, Converter={StaticResource BoolToVisibility}}"
+                            ToolTip="Stop waiting for the uninstaller. It keeps running on its own." />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
