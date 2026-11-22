@@ -16,6 +16,16 @@ public sealed class NullToVisibilityConverter : IValueConverter
         throw new NotSupportedException();
 }
 
+/// <summary>Binds a RadioButton.IsChecked to an enum value given as ConverterParameter.</summary>
+public sealed class EnumToBoolConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        value is not null && parameter is string name && value.ToString() == name;
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        value is true && parameter is string name ? Enum.Parse(targetType, name) : Binding.DoNothing;
+}
+
 /// <summary>Visible when the string is empty - used for the search box placeholder.</summary>
 public sealed class EmptyStringToVisibilityConverter : IValueConverter
 {

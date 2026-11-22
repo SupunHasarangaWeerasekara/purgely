@@ -14,13 +14,19 @@ public sealed partial class MainViewModel : ObservableObject
     private readonly AppCatalog _catalog;
     private readonly UninstallService _uninstaller;
     private readonly IDialogService _dialogs;
+    private readonly ThemeService _themes;
+    private readonly SettingsStore _settings;
     private CancellationTokenSource? _waitCts;
 
-    public MainViewModel(AppCatalog catalog, UninstallService uninstaller, IDialogService dialogs)
+    public MainViewModel(AppCatalog catalog, UninstallService uninstaller, IDialogService dialogs,
+        ThemeService themes, SettingsStore settings)
     {
         _catalog = catalog;
         _uninstaller = uninstaller;
         _dialogs = dialogs;
+        _themes = themes;
+        _settings = settings;
+        _selectedTheme = themes.Theme;
         AppsView = CollectionViewSource.GetDefaultView(Apps);
         AppsView.Filter = Matches;
         AppsView.SortDescriptions.Add(new SortDescription(nameof(AppItemViewModel.Name), ListSortDirection.Ascending));
@@ -51,6 +57,15 @@ public sealed partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     private string _summary = string.Empty;
+
+    [ObservableProperty]
+    private AppTheme _selectedTheme;
+
+    partial void OnSelectedThemeChanged(AppTheme value)
+    {
+        _themes.Apply(value);
+        _settings.Save(_settings.Load() with { Theme = value });
+    }
 
     partial void OnSearchTextChanged(string value)
     {
