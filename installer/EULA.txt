@@ -1,0 +1,68 @@
+PURGELY - END USER LICENSE AGREEMENT
+Version 1.0
+
+Please read this agreement carefully before installing or using Purgely
+("the Software"). By installing or using the Software you agree to these
+terms. If you do not agree, do not install or use the Software.
+
+1. LICENSE
+   You are granted a free, non-exclusive, non-transferable license to install
+   and use the Software on any number of computers you own or control, for
+   personal or commercial use.
+
+2. RESTRICTIONS
+   You may not:
+   a) sell, rent, or sublicense the Software;
+   b) redistribute modified versions of the Software under the Purgely name;
+   c) remove or alter any copyright notices in the Software.
+
+3. WHAT THE SOFTWARE DOES
+   The Software removes programs installed on your computer and can search for
+   and delete files, folders, and registry entries that those programs left
+   behind ("leftovers").
+
+4. YOUR RESPONSIBILITY FOR DELETIONS
+   a) The Software shows you the items it found before deleting anything.
+      Items are deleted only after you select and confirm them.
+   b) You are responsible for reviewing every item before you confirm. Leftover
+      detection is based on names and locations and may include items that are
+      shared with, or needed by, other programs, or that contain your own data.
+   c) Deleted files are sent to the Recycle Bin and deleted registry entries
+      are backed up where possible, but recovery is not guaranteed.
+   d) You should keep backups of important data and may create a System
+      Restore point before removing programs.
+
+5. THIRD-PARTY UNINSTALLERS
+   Most programs are removed by running the program's own uninstaller. The
+   Software does not control and is not responsible for the behavior of
+   third-party uninstallers.
+
+6. PRIVACY
+   The Software runs entirely on your computer. It does not collect, store,
+   or send any personal information or usage data to the developer or to any
+   third party.
+
+7. UPDATES
+   The developer may release updates. Updates are governed by this agreement
+   unless they come with a different agreement.
+
+8. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+9. LIMITATION OF LIABILITY
+   TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL THE DEVELOPER BE
+   LIABLE FOR ANY CLAIM, DAMAGES, DATA LOSS, OR OTHER LIABILITY ARISING FROM
+   THE USE OF, OR INABILITY TO USE, THE SOFTWARE.
+
+10. TERMINATION
+    This license ends automatically if you break any of its terms. On
+    termination you must uninstall and stop using the Software.
+
+11. GENERAL
+    If any part of this agreement is found unenforceable, the remaining parts
+    stay in effect. This agreement is the entire agreement between you and the
+    developer regarding the Software.
+
+Copyright (c) 2026 Purgely. All rights reserved.
