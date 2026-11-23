@@ -28,7 +28,13 @@ dotnet run --project src/Purgely.App   # asks for administrator rights
 
 ## Installer
 
+Needs [Inno Setup 6](https://jrsoftware.org/isinfo.php). Runs the tests, publishes a
+self-contained single-file `Purgely.exe` (no .NET install needed on the target PC) and
+builds `dist\Purgely-Setup-<version>.exe`:
+
 ```powershell
-dotnet publish src/Purgely.App -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o publish
-& "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe" installer\Purgely.iss   # output: dist\
+powershell -ExecutionPolicy Bypass -File tools\build-installer.ps1
 ```
+
+To release a new version, bump `<Version>` in `Directory.Build.props` and `AppVersion` in
+`installer\Purgely.iss`.

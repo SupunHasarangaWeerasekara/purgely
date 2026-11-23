@@ -16,7 +16,9 @@ AppVersion={#AppVersion}
 AppPublisher={#AppPublisher}
 DefaultDirName={autopf}\{#AppName}
 DefaultGroupName={#AppName}
-DisableProgramDirPage=yes
+; Show the folder page on first install only; upgrades reuse the existing folder.
+DisableDirPage=auto
+DisableProgramGroupPage=yes
 LicenseFile=EULA.txt
 SetupIconFile=..\assets\purgely.ico
 UninstallDisplayIcon={app}\{#AppExeName}
