@@ -238,17 +238,37 @@
         </Setter>
     </Style>
 
+    <!-- Own row template: the stock one lets DataGrid.RowBackground win over the
+         selection colour, so the clicked row never looked selected. -->
     <Style x:Key="GridRow" TargetType="DataGridRow">
-        <Setter Property="Background" Value="Transparent" />
         <Setter Property="MinHeight" Value="48" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource RowHoverBrush}" />
-            </Trigger>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridRow">
+                    <Border x:Name="RowBorder" Background="Transparent" CornerRadius="8" Margin="0,1">
+                        <Grid>
+                            <!-- Accent bar on the left of the selected row -->
+                            <Border x:Name="SelectionBar" Width="3" CornerRadius="1.5" Margin="0,10"
+                                    HorizontalAlignment="Left" Background="{DynamicResource AccentBrush}"
+                                    Visibility="Collapsed" />
+                            <DataGridCellsPresenter ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="RowBorder" Property="Background" Value="{DynamicResource RowHoverBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="RowBorder" Property="Background" Value="{DynamicResource AccentSoftBrush}" />
+                            <Setter TargetName="SelectionBar" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="MutedCellText" TargetType="TextBlock">

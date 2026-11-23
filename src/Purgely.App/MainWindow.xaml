@@ -101,7 +101,7 @@
                           ItemsSource="{Binding AppsView}" SelectedItem="{Binding SelectedApp}"
                           AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
                           HeadersVisibility="Column" GridLinesVisibility="None" BorderThickness="0"
-                          Background="Transparent" RowBackground="Transparent" CanUserResizeRows="False"
+                          Background="Transparent" CanUserResizeRows="False"
                           CanUserReorderColumns="False" EnableRowVirtualization="True"
                           ColumnHeaderStyle="{StaticResource GridHeader}" CellStyle="{StaticResource GridCell}"
                           RowStyle="{StaticResource GridRow}" MouseDoubleClick="AppsGrid_MouseDoubleClick">
